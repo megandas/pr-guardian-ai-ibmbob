@@ -159,12 +159,11 @@ Use a GitHub repository URL and review repository intelligence inside VS Code.
 
 ## 👩‍💻 Team
 
-**NOVATECH**
+**Bob the Builder**
 
 * Megan Das
-* Hardik Gupta
-* Vidhathri Pabba
-* Dhruv Arora
+* Sakshi Kumar
+* Harsh Kumar
 
 ---
 
