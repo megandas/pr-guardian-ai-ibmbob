@@ -32,33 +32,41 @@ model = ModelInference(
 
 def bob_review(prompt: str):
     """
-    Sends the complete prompt to IBM Granite (IBM Bob)
-    and returns the generated review text.
+    Sends prompt to IBM Granite and returns only the answer.
     """
 
     print("🚀 Sending to IBM Bob...")
 
-    response = model.generate_text(prompt=prompt)
+    final_prompt = f"""
+You are PR Guardian AI, an AI code review assistant.
+
+Answer the user's question using the provided context.
+Return only the final answer.
+Do not repeat instructions, prompts, rules, or context.
+
+{prompt}
+"""
+
+    response = model.generate_text(prompt=final_prompt)
 
     print("✅ IBM Bob responded.")
 
-    return response.strip()
+    answer = response.strip()
 
-def bob_chat(question: str, context: str):
-    prompt = f"""
-You are IBM Bob, an AI code reviewer inside VS Code.
+    # Remove any leaked instruction text
+    leak_markers = [
+        "Do NOT",
+        "IMPORTANT:",
+        "Rules:",
+        "Developer Question:",
+        "PROJECT CONTEXT:",
+        "Project Context:",
+        "User Question:",
+        "Your Task:"
+    ]
 
-Pull Request Review Context:
-{context}
+    for marker in leak_markers:
+        if marker in answer:
+            answer = answer.split(marker)[0].strip()
 
-Developer Question:
-{question}
-
-Answer as an experienced software engineer.
-
-Keep answers concise, actionable, and technical.
-"""
-
-    response = model.generate_text(prompt=prompt)
-
-    return response.strip()
+    return answer

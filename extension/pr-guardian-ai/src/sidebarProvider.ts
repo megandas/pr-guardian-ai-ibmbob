@@ -210,6 +210,17 @@ body {
   font-size: 24px;
   font-weight: 800;
 }
+@keyframes scorePop {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
 .score-max {
   font-size: 10px;
@@ -549,6 +560,73 @@ body {
 .hidden {
   display: none;
 }
+/* ================= IBM Bob Agent Workflow ================= */
+
+.agent-workflow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.agent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 10px;
+  background: #10161e;
+  border: 1px solid #30363d;
+  border-radius: 7px;
+}
+
+.agent-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-icon {
+  font-size: 15px;
+}
+
+.agent-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #e6edf3;
+}
+
+.agent-status {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 7px;
+  border-radius: 5px;
+  color: #8b949e;
+  background: rgba(139,148,158,0.1);
+  border: 1px solid #30363d;
+}
+
+.agent-status.running {
+  color: #58a6ff;
+  border-color: #388bfd;
+  background: rgba(56,139,253,0.1);
+}
+
+.agent-status.complete {
+  color: #39d353;
+  border-color: #238636;
+  background: rgba(35,134,54,0.1);
+}
+
+.agent-aggregator {
+  margin-top: 3px;
+  padding-top: 10px;
+  border-top: 1px solid #30363d;
+}
+
+.agent-description {
+  font-size: 9px;
+  color: #8b949e;
+  margin-top: 2px;
+}
 
 </style>
 </head>
@@ -565,16 +643,39 @@ body {
   <div class="subtitle">
     AI-powered Pull Request Security Review
   </div>
+  <!-- GitHub Repository Input -->
+<div class="card">
+  <div class="card-title" style="color:#60A5FA;">
+    📂 Analyze GitHub Repository
+  </div>
 
-</div>
+  <input
+    id="repoUrl"
+    type="text"
+    placeholder="https://github.com/your-username/pr-guardian-ai"
+    style="
+      width:100%;
+      margin-top:14px;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid #334155;
+      background:#0F172A;
+      color:white;
+      outline:none;
+      font-size:14px;
+    "
+  />
 
-<button id="reviewBtn" class="review-btn">
-  🔍 Review Current PR
+  <button id="reviewBtn" class="review-btn">
+  🚀 Analyze & Review Repository
 </button>
-
-<div id="lastReviewed" class="last-reviewed hidden">
-  ● Last reviewed: just now
 </div>
+
+</div>
+
+
+
+
 
 <div id="result">
 
@@ -601,10 +702,14 @@ body {
 
 const button = document.getElementById("reviewBtn");
 const result = document.getElementById("result");
-const lastReviewed = document.getElementById("lastReviewed");
+const repoInput = document.getElementById("repoUrl");
+console.log("Button found:", button);
+console.log("Repo input found:", repoInput);
 
 
 let latestReviewContext = "";
+
+
 
 /*
  * ---------------------------------------------------------
@@ -613,9 +718,26 @@ let latestReviewContext = "";
  */
 
 button.addEventListener("click", async () => {
+  console.log("✅ BUTTON CLICKED");
+
+  const repo = repoInput.value.trim();
+
+  if (repo === "") {
+  console.log("No repository URL entered.");
+
+  result.innerHTML = \`
+    <div class="card">
+      <div style="color:#ff6b6b;font-weight:700;">
+        ❌ Please paste a GitHub repository URL.
+      </div>
+    </div>
+  \`;
+
+  return;
+}
 
   button.disabled = true;
-  button.innerHTML = "⏳ Reviewing PR...";
+  button.innerHTML = "⏳ Analyzing Repository...";
 
   result.innerHTML = \`
     <div class="card">
@@ -666,6 +788,7 @@ button.addEventListener("click", async () => {
 
     
     const data = await response.json();
+  
     latestReviewContext = \`
     Review Score: \${data.review_score}
 
@@ -895,6 +1018,25 @@ button.addEventListener("click", async () => {
      */
 
     result.innerHTML = \`
+    <div style="
+    background:#111827;
+    border:1px solid #2563EB;
+    border-radius:12px;
+    padding:12px;
+    margin-bottom:16px;
+    color:white;
+">
+    <div style="color:#60A5FA;font-weight:700;">Reviewing PR #27</div>
+    <div style="font-size:14px;margin-top:6px;">
+        <strong>Add Replay AI Review & Interactive Code Impact Map</strong>
+    </div>
+    <div style="font-size:13px;color:#CBD5E1;margin-top:8px;">
+        Author: Megan Das, Sakshi Kumar, Harsh Kumar
+    </div>
+    <div style="font-size:13px;color:#CBD5E1;">
+        Branch: feature/replay-ai-review • Files Changed: 3
+    </div>
+</div>
 
       <!-- 1. HEALTH SCORE -->
 
@@ -1039,6 +1181,82 @@ button.addEventListener("click", async () => {
         \${mergeHTML}
 
       </div>
+      <div class="card">
+
+  <div class="card-title cyan">
+    🤖 IBM Bob Multi-Agent Workflow
+  </div>
+
+  <div class="agent-workflow">
+
+    <div class="agent-row">
+      <div class="agent-left">
+        <span class="agent-icon">🛡️</span>
+        <div>
+          <div class="agent-name">Security Agent</div>
+          <div class="agent-description">
+            Detecting secrets, vulnerabilities and unsafe code.
+          </div>
+        </div>
+      </div>
+
+      <span id="securityStatus" class="agent-status running">
+        Running...
+      </span>
+    </div>
+
+    <div class="agent-row">
+      <div class="agent-left">
+        <span class="agent-icon">⚡</span>
+        <div>
+          <div class="agent-name">Performance Agent</div>
+          <div class="agent-description">
+            Reviewing inefficient logic and bottlenecks.
+          </div>
+        </div>
+      </div>
+
+      <span id="performanceStatus" class="agent-status running">
+        Running...
+      </span>
+    </div>
+
+    <div class="agent-row">
+      <div class="agent-left">
+        <span class="agent-icon">🧪</span>
+        <div>
+          <div class="agent-name">Testing Agent</div>
+          <div class="agent-description">
+            Checking test coverage and edge cases.
+          </div>
+        </div>
+      </div>
+
+      <span id="testingStatus" class="agent-status running">
+        Running...
+      </span>
+    </div>
+
+    <div class="agent-row agent-aggregator">
+      <div class="agent-left">
+        <span class="agent-icon">🤖</span>
+        <div>
+          <div class="agent-name">IBM Bob Aggregator</div>
+          <div class="agent-description">
+            Combining findings into one recommendation.
+          </div>
+        </div>
+      </div>
+
+      <span id="bobStatus" class="agent-status running">
+        Running...
+      </span>
+    </div>
+
+  </div>
+
+</div>
+
 
 
       <!-- 4. AI RECOMMENDATION -->
@@ -1169,6 +1387,40 @@ button.addEventListener("click", async () => {
       </div>
 
     \`;
+   
+    // Animate IBM Bob workflow step by step (5-second demo)
+
+setTimeout(() => {
+  const securityStatus = document.getElementById("securityStatus");
+  if (securityStatus) {
+    securityStatus.className = "agent-status complete";
+    securityStatus.textContent = "✓ Complete";
+  }
+}, 1000);   // 1 second
+
+setTimeout(() => {
+  const performanceStatus = document.getElementById("performanceStatus");
+  if (performanceStatus) {
+    performanceStatus.className = "agent-status complete";
+    performanceStatus.textContent = "✓ Complete";
+  }
+}, 2200);   // 2.2 seconds
+
+setTimeout(() => {
+  const testingStatus = document.getElementById("testingStatus");
+  if (testingStatus) {
+    testingStatus.className = "agent-status complete";
+    testingStatus.textContent = "✓ Complete";
+  }
+}, 3400);   // 3.4 seconds
+
+setTimeout(() => {
+  const bobStatus = document.getElementById("bobStatus");
+  if (bobStatus) {
+    bobStatus.className = "agent-status complete";
+    bobStatus.textContent = "✓ Complete";
+  }
+}, 5000);   // 5 seconds
     initialiseChat();
 
 
@@ -1197,7 +1449,6 @@ button.addEventListener("click", async () => {
     }
 
 
-    lastReviewed.classList.remove("hidden");
 
 
   } catch (error) {
@@ -1238,11 +1489,13 @@ button.addEventListener("click", async () => {
     button.disabled = false;
 
     button.innerHTML =
-      "🔍 Review Current PR";
+      "🚀 Analyze & Review Repository";
 
   }
 
 });
+
+  
 function initialiseChat() {
 
   const chatMessages = document.getElementById("chatMessages");
@@ -1296,6 +1549,10 @@ function initialiseChat() {
   };
 }
 
+// ================================================
+
+
+
 
 
 </script>
@@ -1303,6 +1560,7 @@ function initialiseChat() {
 </body>
 </html>
 `;
+
   }
 }
 

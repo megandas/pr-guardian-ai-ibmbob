@@ -1,0 +1,55 @@
+# ==========================================
+
+# IBM Bob Ignore File - PR Guardian AI
+
+# ==========================================
+
+# Secrets & credentials
+
+.env
+backend/.env
+.env.*
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+
+# Python virtual environments
+
+backend/venv/
+backend/.venv/
+
+# Python cache
+
+**/**pycache**/
+*.pyc
+
+# VS Code extension build artifacts
+
+extension/pr-guardian-ai/out/
+extension/pr-guardian-ai/node_modules/
+extension/pr-guardian-ai/.vscode-test/
+
+# Vector database / generated AI data
+
+backend/chroma_db/
+backend/chroma/
+*.sqlite
+*.db
+
+# Logs and temporary files
+
+*.log
+*.tmp
+*.temp
+
+# Git metadata
+
+.git/
+
+# Operating system files
+
+.DS_Store
+Thumbs.db
+desktop.ini

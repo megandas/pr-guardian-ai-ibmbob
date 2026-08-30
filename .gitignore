@@ -1,0 +1,98 @@
+# ==========================================
+
+# PR Guardian AI - IBM TechXchange Hackathon
+
+# ==========================================
+
+# --------------------
+
+# Python Backend
+
+# --------------------
+
+backend/venv/
+backend/.venv/
+backend/**pycache**/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/**/*.pyd
+
+# Environment variables (DO NOT COMMIT)
+
+backend/.env
+.env
+
+# Python cache
+
+.pytest_cache/
+.mypy_cache/
+
+# --------------------
+
+# VS Code Extension
+
+# --------------------
+
+extension/pr-guardian-ai/node_modules/
+extension/pr-guardian-ai/out/
+extension/pr-guardian-ai/.vscode-test/
+
+# TypeScript cache
+
+*.tsbuildinfo
+
+# --------------------
+
+# Database / Vector Store
+
+# --------------------
+
+backend/chroma_db/
+backend/chroma/
+*.sqlite
+*.db
+
+# --------------------
+
+# Logs
+
+# --------------------
+
+*.log
+
+# --------------------
+
+# OS Files
+
+# --------------------
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --------------------
+
+# VS Code Local Settings
+
+# --------------------
+
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+
+# --------------------
+
+# Temporary Files
+
+# --------------------
+
+*.tmp
+*.temp
+*.bak
+
+# Python cache
+**/__pycache__/
+*.pyc
+
+# Chroma vector database
+backend/rag/chroma_db/

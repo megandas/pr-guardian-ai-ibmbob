@@ -3,22 +3,28 @@
   "displayName": "PR Guardian AI",
   "description": "AI PR Reviewer using IBM Bob",
   "version": "0.0.1",
+
   "engines": {
     "vscode": "^1.102.0"
   },
+
   "categories": [
     "Other"
   ],
+
   "activationEvents": [
-  "onView:prguardianView"
-],
+    "onView:prguardianView",
+    "onCommand:pr-guardian-ai.showArchitecture"
+  ],
+
   "main": "./out/extension.js",
 
   "contributes": {
     "commands": [
       {
-        "command": "pr-guardian-ai.helloWorld",
-        "title": "Hello World"
+        "command": "pr-guardian-ai.showArchitecture",
+        "title": "PR Guardian AI: Show Repository Architecture",
+        "category": "PR Guardian AI"
       }
     ],
 
@@ -39,6 +45,14 @@
           "id": "prguardianView",
           "name": "Review Pull Request",
           "icon": "media/icon.svg"
+        }
+      ]
+    },
+
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "pr-guardian-ai.showArchitecture"
         }
       ]
     }
